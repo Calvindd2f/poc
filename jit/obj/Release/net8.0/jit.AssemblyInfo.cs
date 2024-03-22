@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("jit")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cc6f8b41cf22097e52e0b9fe9ab2d2e889a8dc72")]
 [assembly: System.Reflection.AssemblyProductAttribute("jit")]
 [assembly: System.Reflection.AssemblyTitleAttribute("jit")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

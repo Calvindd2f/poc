@@ -2,3 +2,4 @@ C:\Users\c\Documents\poc\jit\obj\Release\net8.0\jit.GeneratedMSBuildEditorConfig
 C:\Users\c\Documents\poc\jit\obj\Release\net8.0\jit.AssemblyInfoInputs.cache
 C:\Users\c\Documents\poc\jit\obj\Release\net8.0\jit.AssemblyInfo.cs
 C:\Users\c\Documents\poc\jit\obj\Release\net8.0\jit.csproj.CoreCompileInputs.cache
+C:\Users\c\Documents\poc\jit\obj\Release\net8.0\jit.sourcelink.json
